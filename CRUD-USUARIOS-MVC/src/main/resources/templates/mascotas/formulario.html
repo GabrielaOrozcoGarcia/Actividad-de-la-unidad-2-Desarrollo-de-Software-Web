@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${mascota.id != null} ? 'Editar Mascota' : 'Nueva Mascota'">Formulario Mascota</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+        nav { background: #0066cc; padding: 12px 24px; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
+        .container { max-width: 750px; margin: 32px auto; padding: 0 20px; }
+        .card { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1 { color: #333; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
+        input, select { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        input:focus, select:focus { outline: none; border-color: #0066cc; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; font-size: 14px; }
+        .btn-secondary { background: #6c757d; margin-left: 8px; }
+        .btn:hover { opacity: 0.85; }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        .checkbox-group input { width: auto; }
+        .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    </style>
+</head>
+<body>
+<nav>
+    <div>
+        <a th:href="@{/}"> Inicio</a>
+        <a th:href="@{/mascotas}"> Mascotas</a>
+    </div>
+    <div>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="logout-btn">Cerrar sesión</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+    <div class="card">
+        <h1 th:text="${mascota.id != null} ? ' Editar Mascota' : ' Registrar Mascota'">Formulario</h1>
+
+        <form th:action="${mascota.id != null} ? '/mascotas/actualizar' : '/mascotas/guardar'"
+              th:object="${mascota}" method="post">
+
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nombre *</label>
+                    <input type="text" th:field="*{nombre}" placeholder="Nombre de la mascota" required>
+                </div>
+                <div class="form-group">
+                    <label>Especie *</label>
+                    <input type="text" th:field="*{especie}" placeholder="Ej: Perro, Gato, Ave" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Raza *</label>
+                    <input type="text" th:field="*{raza}" placeholder="Raza de la mascota" required>
+                </div>
+                <div class="form-group">
+                    <label>Género *</label>
+                    <select th:field="*{genero}" required>
+                        <option value="">-- Seleccionar --</option>
+                        <option value="Macho">Macho</option>
+                        <option value="Hembra">Hembra</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Peso (kg) *</label>
+                    <input type="number" th:field="*{peso}" step="0.01" min="0.01" placeholder="Ej: 5.5" required>
+                </div>
+                <div class="form-group">
+                    <label>Tamaño *</label>
+                    <select th:field="*{tamano}" required>
+                        <option value="">-- Seleccionar --</option>
+                        <option value="Pequeño">Pequeño</option>
+                        <option value="Mediano">Mediano</option>
+                        <option value="Grande">Grande</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Color *</label>
+                    <input type="text" th:field="*{color}" placeholder="Color de la mascota" required>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Nacimiento *</label>
+                    <input type="date" th:field="*{fechaNacimiento}" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Propietario *</label>
+                    <input type="text" th:field="*{propietario}" placeholder="Nombre del propietario" required>
+                </div>
+                <div class="form-group">
+                    <label>Doméstico o Salvaje *</label>
+                    <select th:field="*{domesticoOSalvaje}" required>
+                        <option value="">-- Seleccionar --</option>
+                        <option value="Doméstico">Doméstico</option>
+                        <option value="Salvaje">Salvaje</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Veterinario *</label>
+                <input type="text" th:field="*{veterinario}" placeholder="Nombre del veterinario" required>
+            </div>
+
+            <div class="form-group">
+                <label>¿Tiene vacunas?</label>
+                <div class="checkbox-group">
+                    <input type="checkbox" th:field="*{tieneVacunas}" id="tieneVacunas">
+                    <label for="tieneVacunas" style="margin:0">Sí, tiene vacunas</label>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <button type="submit" class="btn">
+                    <span th:text="${mascota.id != null} ? 'Actualizar Mascota' : 'Registrar Mascota'">Guardar</span>
+                </button>
+                <a th:href="@{/mascotas}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Mascota</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+        nav { background: #0066cc; padding: 12px 24px; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
+        .container { max-width: 700px; margin: 32px auto; padding: 0 20px; }
+        .card { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1 { color: #333; margin-bottom: 24px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f0f4f8; color: #333; padding: 10px 14px; text-align: left; width: 180px; font-size: 14px; border-bottom: 1px solid #eee; }
+        td { padding: 10px 14px; font-size: 14px; border-bottom: 1px solid #eee; }
+        .btn { display: inline-block; padding: 8px 18px; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 13px; margin-top: 20px; margin-right: 8px; }
+        .btn-warning { background: #e68a00; }
+        .badge-si { background: #eaf8ec; color: #1a5c20; padding: 3px 10px; border-radius: 10px; }
+        .badge-no { background: #fdeaea; color: #c00; padding: 3px 10px; border-radius: 10px; }
+        .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    </style>
+</head>
+<body>
+<nav>
+    <div>
+        <a th:href="@{/}"> Inicio</a>
+        <a th:href="@{/mascotas}"> Mascotas</a>
+        <a th:href="@{/mascotas/nueva}"> Nueva Mascota</a>
+    </div>
+    <div>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="logout-btn">Cerrar sesión</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+    <div class="card">
+        <h1>🐾 Detalle de Mascota</h1>
+        <table>
+            <tr><th>ID</th><td th:text="${mascota.id}"></td></tr>
+            <tr><th>Nombre</th><td th:text="${mascota.nombre}"></td></tr>
+            <tr><th>Especie</th><td th:text="${mascota.especie}"></td></tr>
+            <tr><th>Raza</th><td th:text="${mascota.raza}"></td></tr>
+            <tr><th>Género</th><td th:text="${mascota.genero}"></td></tr>
+            <tr><th>Peso</th><td th:text="${mascota.peso} + ' kg'"></td></tr>
+            <tr><th>Tamaño</th><td th:text="${mascota.tamano}"></td></tr>
+            <tr><th>Color</th><td th:text="${mascota.color}"></td></tr>
+            <tr><th>Fecha Nacimiento</th><td th:text="${mascota.fechaNacimiento}"></td></tr>
+            <tr><th>Propietario</th><td th:text="${mascota.propietario}"></td></tr>
+            <tr><th>Hábitat</th><td th:text="${mascota.domesticoOSalvaje}"></td></tr>
+            <tr>
+                <th>Tiene Vacunas</th>
+                <td>
+                    <span th:if="${mascota.tieneVacunas}" class="badge-si"> Sí</span>
+                    <span th:unless="${mascota.tieneVacunas}" class="badge-no"> No</span>
+                </td>
+            </tr>
+            <tr><th>Veterinario</th><td th:text="${mascota.veterinario}"></td></tr>
+        </table>
+        <div>
+            <a th:href="@{/mascotas/editar/{id}(id=${mascota.id})}" class="btn btn-warning"> Editar</a>
+            <a th:href="@{/mascotas}" class="btn">← Volver al listado</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? 'Editar Usuario' : 'Nuevo Usuario'">
+        Formulario Usuario
+    </title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+        nav { background: #333; padding: 12px 24px; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
+        .container { max-width: 600px; margin: 32px auto; padding: 0 20px; }
+        .card { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1 { color: #333; margin-bottom: 24px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
+        input { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        input:focus { outline: none; border-color: #333; }
+        input[readonly] { background: #f5f5f5; color: #888; }
+        .btn { display: inline-block; padding: 10px 20px; background: #333; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; font-size: 14px; }
+        .btn-secondary { background: #6c757d; margin-left: 8px; }
+        .btn:hover { opacity: 0.85; }
+        .hint { font-size: 12px; color: #888; margin-top: 4px; }
+        .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    </style>
+</head>
+<body>
+<nav>
+    <div>
+        <a th:href="@{/}"> Inicio</a>
+        <a th:href="@{/usuarios}"> Usuarios</a>
+        <a th:href="@{/mascotas}"> Mascotas</a>
+    </div>
+    <div>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="logout-btn">Cerrar sesión</button>
+        </form>
+    </div>
+</nav>
+<div class="container">
+    <div class="card">
+        <h1 th:text="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? ' Editar Usuario' : ' Nuevo Usuario'">
+            Formulario
+        </h1>
+
+        <form th:action="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}
+                  ? '/usuarios/actualizar'
+                  : '/usuarios/guardar'"
+              th:object="${usuario}"
+              method="post">
+
+            <div class="form-group">
+                <label>Cédula *</label>
+                <input type="text"
+                       th:field="*{cedula}"
+                       th:readonly="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}"
+                       placeholder="Número de cédula" required>
+                <div class="hint" th:if="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}">
+                    La cédula no se puede modificar.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Nombre completo *</label>
+                <input type="text" th:field="*{nombre}"
+                       placeholder="Nombre completo en mayúsculas" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" th:field="*{email}"
+                       placeholder="correo@ejemplo.com" required>
+            </div>
+
+            <div class="form-group">
+                <label th:text="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}
+                               ? 'Nueva clave (dejar vacío para no cambiar)'
+                               : 'Clave *'">Clave</label>
+                <input type="password" th:field="*{clave}"
+                       placeholder="Mínimo 6 caracteres"
+                       th:required="${usuario.cedula == null or #strings.isEmpty(usuario.cedula)}">
+                <div class="hint">La clave se guardará encriptada con BCrypt.</div>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <button type="submit" class="btn"
+                        th:text="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}
+                                 ? 'Actualizar Usuario'
+                                 : 'Registrar Usuario'">
+                    Guardar
+                </button>
+                <a th:href="@{/usuarios}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
