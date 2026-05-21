@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - CRUDL Usuarios-Mascotas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
+        nav { background: #333; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+        nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
+        nav a:hover { text-decoration: underline; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #333; margin-bottom: 8px; }
+        .subtitle { color: #666; margin-bottom: 32px; }
+        .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .card { background: white; padding: 28px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h2 { color: #333; margin-bottom: 12px; }
+        .card p { color: #666; font-size: 14px; margin-bottom: 16px; line-height: 1.6; }
+        .card ul { color: #666; font-size: 14px; margin-bottom: 20px; padding-left: 20px; line-height: 1.8; }
+        .btn { display: inline-block; padding: 10px 20px; background: #333; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; margin-right: 8px; }
+        .btn-blue { background: #0066cc; }
+        .btn:hover { opacity: 0.85; }
+        .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .user-info { color: white; font-size: 14px; display: flex; align-items: center; gap: 12px; }
+    </style>
+</head>
+<body>
+<nav>
+    <div>
+        <a th:href="@{/}"> Inicio</a>
+        <a th:href="@{/usuarios}"> Usuarios</a>
+        <a th:href="@{/usuarios/nuevo}"> Nuevo Usuario</a>
+        <a th:href="@{/mascotas}"> Mascotas</a>
+        <a th:href="@{/mascotas/nueva}"> Nueva Mascota</a>
+    </div>
+    <div class="user-info">
+        <span> <span sec:authentication="name">Usuario</span></span>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit" class="logout-btn">Cerrar sesion</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+    <h1> Sistema de Gestion con Spring Boot MVC</h1>
+    <p class="subtitle">Aplicacion web con dos modulos CRUDL usando Spring Boot, JPA, Thymeleaf y Spring Security.</p>
+
+    <div class="cards">
+        <!-- Modulo Usuarios -->
+        <div class="card">
+            <h2> Modulo de Usuarios</h2>
+            <p>Gestion completa de usuarios del sistema con autenticacion segura.</p>
+            <ul>
+                <li><strong>C:</strong> Registrar usuario</li>
+                <li><strong>R:</strong> Consultar usuario</li>
+                <li><strong>U:</strong> Actualizar usuario</li>
+                <li><strong>D:</strong> Eliminar usuario</li>
+                <li><strong>L:</strong> Listar usuarios</li>
+            </ul>
+            <a th:href="@{/usuarios}" class="btn">Ver Usuarios</a>
+            <a th:href="@{/usuarios/nuevo}" class="btn btn-blue"> Nuevo</a>
+        </div>
+
+        <!-- Modulo Mascotas -->
+        <div class="card">
+            <h2> Modulo de Mascotas</h2>
+            <p>Gestion completa de mascotas con todos sus atributos y datos del propietario.</p>
+            <ul>
+                <li><strong>C:</strong> Registrar mascota</li>
+                <li><strong>R:</strong> Consultar mascota</li>
+                <li><strong>U:</strong> Actualizar mascota</li>
+                <li><strong>D:</strong> Eliminar mascota</li>
+                <li><strong>L:</strong> Listar mascotas</li>
+            </ul>
+            <a th:href="@{/mascotas}" class="btn">Ver Mascotas</a>
+            <a th:href="@{/mascotas/nueva}" class="btn btn-blue"> Nueva</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
