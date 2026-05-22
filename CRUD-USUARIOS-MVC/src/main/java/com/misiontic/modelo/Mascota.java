@@ -7,10 +7,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "mascotas")
-public class Mascota {
+public class Mascota implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,46 +60,4 @@ public class Mascota {
     @Column(nullable = false, length = 100)
     private String veterinario;
 
-    // Constructor vacío requerido por JPA
-    public Mascota() {}
-
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getGenero() { return genero; }
-    public void setGenero(String genero) { this.genero = genero; }
-
-    public Double getPeso() { return peso; }
-    public void setPeso(Double peso) { this.peso = peso; }
-
-    public String getTamano() { return tamano; }
-    public void setTamano(String tamano) { this.tamano = tamano; }
-
-    public String getColor() { return color; }
-    public void setColor(String color) { this.color = color; }
-
-    public String getRaza() { return raza; }
-    public void setRaza(String raza) { this.raza = raza; }
-
-    public String getEspecie() { return especie; }
-    public void setEspecie(String especie) { this.especie = especie; }
-
-    public String getFechaNacimiento() { return fechaNacimiento; }
-    public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
-
-    public String getPropietario() { return propietario; }
-    public void setPropietario(String propietario) { this.propietario = propietario; }
-
-    public String getDomesticoOSalvaje() { return domesticoOSalvaje; }
-    public void setDomesticoOSalvaje(String domesticoOSalvaje) { this.domesticoOSalvaje = domesticoOSalvaje; }
-
-    public Boolean getTieneVacunas() { return tieneVacunas; }
-    public void setTieneVacunas(Boolean tieneVacunas) { this.tieneVacunas = tieneVacunas; }
-
-    public String getVeterinario() { return veterinario; }
-    public void setVeterinario(String veterinario) { this.veterinario = veterinario; }
 }
