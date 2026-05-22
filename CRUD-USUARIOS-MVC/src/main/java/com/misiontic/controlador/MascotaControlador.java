@@ -1,8 +1,7 @@
 package com.misiontic.controlador;
 
-
 import com.misiontic.modelo.Mascota;
-import com.misiontic.servicio.MascotaServicio;
+import com.misiontic.servicio.IMascotaServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MascotaControlador {
 
     @Autowired
-    private MascotaServicio mascotaServicio;
+    private IMascotaServicio mascotaServicio;
 
     // L — Listar mascotas
     @GetMapping
@@ -28,7 +27,7 @@ public class MascotaControlador {
         return "mascotas/lista";
     }
 
-    // C — Mostrar formulario de creación
+    // C — Mostrar formulario de creacion
     @GetMapping("/nueva")
     public String mostrarFormularioNueva(Model modelo) {
         modelo.addAttribute("mascota", new Mascota());
