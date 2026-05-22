@@ -4,10 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(length = 20)
@@ -21,18 +29,4 @@ public class Usuario {
 
     @Column(nullable = false, length = 150)
     private String email;
-
-    public Usuario() {}
-
-    public String getCedula()  { return cedula; }
-    public void setCedula(String cedula) { this.cedula = cedula; }
-
-    public String getClave()   { return clave; }
-    public void setClave(String clave) { this.clave = clave; }
-
-    public String getNombre()  { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
-    public String getEmail()   { return email; }
-    public void setEmail(String email) { this.email = email; }
 }
