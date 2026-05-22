@@ -27,7 +27,7 @@ public class UsuarioServicio {
 
     // L — Listar todos los usuarios
     public List<Usuario> listarTodos() {
-        return usuarioRepositorio.findAll();
+        return (List<Usuario>) usuarioRepositorio.findAll();
     }
 
     // C — Guardar nuevo usuario (hashea la clave)
