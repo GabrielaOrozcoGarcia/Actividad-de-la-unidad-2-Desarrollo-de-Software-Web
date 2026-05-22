@@ -16,7 +16,7 @@ public class MascotaServicio {
 
     // Listar todas las mascotas
     public List<Mascota> listarTodas() {
-        return mascotaRepositorio.findAll();
+        return (List<Mascota>) mascotaRepositorio.findAll();
     }
 
     // Guardar nueva mascota
