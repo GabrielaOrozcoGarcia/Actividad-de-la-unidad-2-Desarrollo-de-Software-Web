@@ -6,11 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -77,5 +73,24 @@ public class UsuarioControlador {
     public String eliminar(@PathVariable String cedula) {
         usuarioServicio.eliminar(cedula);
         return "redirect:/usuarios";
+    }
+
+    // Mostrar formulario de olvidé mi contraseña
+    @GetMapping("/olvide-contrasena")
+    public String mostrarOlvideContrasena() {
+        return "usuarios/olvide-contrasena";
+    }
+
+    // Procesar recuperación de contraseña
+    @PostMapping("/recuperar-contrasena")
+    public String recuperarContrasena(
+            @RequestParam String email,
+            Model modelo) {
+        // Procesamos sin revelar si el email existe o no
+        usuarioServicio.recuperarContrasena(email);
+        modelo.addAttribute("mensaje",
+                "Si el correo está registrado en el sistema, " +
+                        "recibirás un mensaje con tu contraseña temporal en breve.");
+        return "usuarios/olvide-contrasena";
     }
 }
