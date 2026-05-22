@@ -1,7 +1,7 @@
 package com.misiontic.controlador;
 
 import com.misiontic.modelo.Usuario;
-import com.misiontic.servicio.UsuarioServicio;
+import com.misiontic.servicio.IUsuarioServicio;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioControlador {
 
     @Autowired
-    private UsuarioServicio usuarioServicio;
+    private IUsuarioServicio usuarioServicio;
 
     // L — Listar usuarios
     @GetMapping
@@ -55,7 +55,6 @@ public class UsuarioControlador {
         if (usuario == null) {
             return "redirect:/usuarios";
         }
-        // Limpiamos la clave para que no se muestre el hash
         usuario.setClave("");
         modelo.addAttribute("usuario", usuario);
         return "usuarios/formulario";
@@ -86,7 +85,6 @@ public class UsuarioControlador {
     public String recuperarContrasena(
             @RequestParam String email,
             Model modelo) {
-        // Procesamos sin revelar si el email existe o no
         usuarioServicio.recuperarContrasena(email);
         modelo.addAttribute("mensaje",
                 "Si el correo está registrado en el sistema, " +

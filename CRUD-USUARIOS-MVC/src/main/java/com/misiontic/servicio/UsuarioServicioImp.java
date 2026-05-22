@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-public class UsuarioServicio {
+public class UsuarioServicioImp implements IUsuarioServicio {
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
@@ -26,29 +26,23 @@ public class UsuarioServicio {
     private JavaMailSender mailSender;
 
     // L — Listar todos los usuarios
+    @Transactional(readOnly = true)
+    @Override
     public List<Usuario> listarTodos() {
         return (List<Usuario>) usuarioRepositorio.findAll();
     }
 
     // C — Guardar nuevo usuario (hashea la clave)
+    @Transactional
+    @Override
     public void guardar(Usuario usuario) {
         usuario.setClave(passwordEncoder.encode(usuario.getClave()));
         usuarioRepositorio.save(usuario);
     }
 
-    // R — Buscar por cedula
-    public Usuario buscarPorCedula(String cedula) {
-        Optional<Usuario> resultado = usuarioRepositorio.findById(cedula);
-        return resultado.orElse(null);
-    }
-
-    // R — Buscar por email
-    public Usuario buscarPorEmail(String email) {
-        Optional<Usuario> resultado = usuarioRepositorio.findByEmail(email);
-        return resultado.orElse(null);
-    }
-
     // U — Actualizar usuario
+    @Transactional
+    @Override
     public void actualizar(Usuario usuario) {
         Usuario existente = buscarPorCedula(usuario.getCedula());
         if (existente != null) {
@@ -62,28 +56,39 @@ public class UsuarioServicio {
     }
 
     // D — Eliminar por cedula
+    @Transactional
+    @Override
     public void eliminar(String cedula) {
         usuarioRepositorio.deleteById(cedula);
     }
 
+    // R — Buscar por cedula
+    @Transactional(readOnly = true)
+    @Override
+    public Usuario buscarPorCedula(String cedula) {
+        Optional<Usuario> resultado = usuarioRepositorio.findById(cedula);
+        return resultado.orElse(null);
+    }
+
+    // R — Buscar por email
+    @Transactional(readOnly = true)
+    @Override
+    public Usuario buscarPorEmail(String email) {
+        Optional<Usuario> resultado = usuarioRepositorio.findByEmail(email);
+        return resultado.orElse(null);
+    }
+
     // Recuperar contraseña: genera clave temporal, la guarda y envía el correo
+    @Transactional
+    @Override
     public void recuperarContrasena(String email) {
         Usuario usuario = buscarPorEmail(email);
-
-        // Siempre mostramos el mismo mensaje aunque el email no exista
-        // para evitar enumeración de usuarios
         if (usuario == null) {
             return;
         }
-
-        // Generar clave temporal de 8 caracteres
         String claveTemp = generarClaveTemporal();
-
-        // Hashear y guardar
         usuario.setClave(passwordEncoder.encode(claveTemp));
         usuarioRepositorio.save(usuario);
-
-        // Enviar correo HTML
         enviarCorreoRecuperacion(usuario.getEmail(), usuario.getNombre(), claveTemp);
     }
 
@@ -112,19 +117,12 @@ public class UsuarioServicio {
                     + "<div style='max-width:560px;margin:40px auto;background:#fff;border:1px solid #ddd;"
                     + "border-radius:6px;padding:32px'>"
                     + "<h2 style='color:#333;margin-top:0'>Hola, " + nombre + "</h2>"
-                    + "<p style='color:#555'>Recibimos una solicitud de recuperación de contraseña "
-                    + "para tu cuenta en <strong>Mascotas App</strong>.</p>"
                     + "<p style='color:#555'>Tu nueva contraseña temporal es:</p>"
                     + "<div style='font-size:1.4em;font-weight:bold;background:#f0f7ff;"
                     + "border:1px solid #99c8ff;border-radius:4px;padding:12px 20px;"
                     + "display:inline-block;letter-spacing:2px;margin:12px 0'>"
                     + claveTemp + "</div>"
-                    + "<p style='color:#555'>Por seguridad, <strong>te recomendamos cambiar esta contraseña</strong> "
-                    + "inmediatamente después de iniciar sesión.</p>"
-                    + "<p style='color:#555'>Si no solicitaste este cambio, puedes ignorar este correo.</p>"
-                    + "<hr style='border:none;border-top:1px solid #eee;margin-top:24px'>"
-                    + "<p style='font-size:12px;color:#999'>Este es un correo automático, "
-                    + "por favor no respondas a este mensaje.</p>"
+                    + "<p style='color:#555'>Por seguridad, cámbiala al iniciar sesión.</p>"
                     + "</div></body></html>";
 
             helper.setText(cuerpo, true);
