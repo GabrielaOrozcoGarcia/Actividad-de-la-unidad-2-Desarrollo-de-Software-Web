@@ -29,8 +29,9 @@
 <nav>
     <div>
         <a th:href="@{/}"> Inicio</a>
+        <a th:href="@{/usuarios}"> Usuarios</a>
         <a th:href="@{/mascotas}"> Mascotas</a>
-        <a th:href="@{/mascotas/nueva}"> Nueva Mascota</a>
+        <a th:href="@{/mascotas/agregar}"> Nueva Mascota</a>
     </div>
     <div>
         <form th:action="@{/logout}" method="post" style="display:inline">
@@ -41,7 +42,7 @@
 <div class="container">
     <div class="top-bar">
         <h1> Lista de Mascotas</h1>
-        <a th:href="@{/mascotas/nueva}" class="btn btn-success"> Nueva Mascota</a>
+        <a th:href="@{/mascotas/agregar}" class="btn btn-success"> Nueva Mascota</a>
     </div>
 
     <div th:if="${#lists.isEmpty(mascotas)}">

@@ -29,9 +29,9 @@
     <div>
         <a th:href="@{/}"> Inicio</a>
         <a th:href="@{/usuarios}"> Usuarios</a>
-        <a th:href="@{/usuarios/nuevo}"> Nuevo Usuario</a>
+        <a th:href="@{/usuarios/agregar}"> Nuevo Usuario</a>
         <a th:href="@{/mascotas}"> Mascotas</a>
-        <a th:href="@{/mascotas/nueva}"> Nueva Mascota</a>
+        <a th:href="@{/mascotas/agregar}"> Nueva Mascota</a>
     </div>
     <div class="user-info">
         <span> <span sec:authentication="name">Usuario</span></span>
@@ -58,7 +58,7 @@
                 <li><strong>L:</strong> Listar usuarios</li>
             </ul>
             <a th:href="@{/usuarios}" class="btn">Ver Usuarios</a>
-            <a th:href="@{/usuarios/nuevo}" class="btn btn-blue"> Nuevo</a>
+            <a th:href="@{/usuarios/agregar}" class="btn btn-blue"> Nuevo</a>
         </div>
 
         <!-- Modulo Mascotas -->
@@ -73,7 +73,7 @@
                 <li><strong>L:</strong> Listar mascotas</li>
             </ul>
             <a th:href="@{/mascotas}" class="btn">Ver Mascotas</a>
-            <a th:href="@{/mascotas/nueva}" class="btn btn-blue"> Nueva</a>
+            <a th:href="@{/mascotas/agregar}" class="btn btn-blue"> Nueva</a>
         </div>
     </div>
 </div>

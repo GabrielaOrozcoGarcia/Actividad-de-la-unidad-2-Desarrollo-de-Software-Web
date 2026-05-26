@@ -6,11 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/mascotas")
@@ -27,10 +23,9 @@ public class MascotaControlador {
         return "mascotas/lista";
     }
 
-    // C — Mostrar formulario de creacion
-    @GetMapping("/nueva")
-    public String mostrarFormularioNueva(Model modelo) {
-        modelo.addAttribute("mascota", new Mascota());
+    // C — Mostrar formulario nuevo  (ruta: /mascotas/agregar)
+    @GetMapping("/agregar")
+    public String agregar(Mascota mascota) {
         return "mascotas/formulario";
     }
 
@@ -41,7 +36,7 @@ public class MascotaControlador {
         return "redirect:/mascotas";
     }
 
-    // R — Ver detalle de mascota
+    // R — Ver detalle
     @GetMapping("/ver/{id}")
     public String ver(@PathVariable Long id, Model modelo) {
         Mascota mascota = mascotaServicio.buscarPorId(id);
@@ -52,9 +47,9 @@ public class MascotaControlador {
         return "mascotas/detalle";
     }
 
-    // U — Mostrar formulario de edición
+    // U — Mostrar formulario editar
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditar(@PathVariable Long id, Model modelo) {
+    public String editar(@PathVariable Long id, Model modelo) {
         Mascota mascota = mascotaServicio.buscarPorId(id);
         if (mascota == null) {
             return "redirect:/mascotas";

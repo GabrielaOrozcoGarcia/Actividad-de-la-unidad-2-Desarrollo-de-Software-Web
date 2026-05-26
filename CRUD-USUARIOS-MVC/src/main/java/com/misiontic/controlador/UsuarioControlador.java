@@ -2,10 +2,12 @@ package com.misiontic.controlador;
 
 import com.misiontic.modelo.Usuario;
 import com.misiontic.servicio.IUsuarioServicio;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -23,17 +25,48 @@ public class UsuarioControlador {
         return "usuarios/lista";
     }
 
-    // C — Mostrar formulario nuevo
-    @GetMapping("/nuevo")
-    public String mostrarFormularioNuevo(Model modelo) {
-        modelo.addAttribute("usuario", new Usuario());
+    // C — Mostrar formulario nuevo  (Guía 10: ruta /agregar)
+    @GetMapping("/agregar")
+    public String agregar(Usuario usuario) {
         return "usuarios/formulario";
     }
 
-    // C — Guardar nuevo usuario
+    // C — Guardar nuevo usuario con validación  (Guía 13)
     @PostMapping("/guardar")
-    public String guardar(@ModelAttribute Usuario usuario) {
+    public String guardar(@Valid Usuario usuario, Errors errores) {
+        if (errores.hasErrors()) {
+            return "usuarios/formulario";
+        }
         usuarioServicio.guardar(usuario);
+        return "redirect:/usuarios";
+    }
+
+    // U — Mostrar formulario editar  (Guía 11: ruta /editar/{cedula})
+    @GetMapping("/editar/{cedula}")
+    public String editar(@PathVariable String cedula, Model modelo) {
+        Usuario usuario = usuarioServicio.buscarPorCedula(cedula);
+        if (usuario == null) {
+            return "redirect:/usuarios";
+        }
+        usuario.setClave("");
+        modelo.addAttribute("usuario", usuario);
+        return "usuarios/formulario";
+    }
+
+    // U — Actualizar usuario con validación  (Guía 13)
+    @PostMapping("/actualizar")
+    public String actualizar(@Valid Usuario usuario, Errors errores) {
+        if (errores.hasErrors()) {
+            return "usuarios/formulario";
+        }
+        usuarioServicio.actualizar(usuario);
+        return "redirect:/usuarios";
+    }
+
+    // D — Eliminar usuario  (Guía 12: ruta /eliminar/{cedula})
+    @GetMapping("/eliminar/{cedula}")
+    public String eliminar(@PathVariable String cedula) {
+        usuarioServicio.eliminar(cedula);
         return "redirect:/usuarios";
     }
 
@@ -46,32 +79,6 @@ public class UsuarioControlador {
         }
         modelo.addAttribute("usuario", usuario);
         return "usuarios/detalle";
-    }
-
-    // U — Mostrar formulario editar
-    @GetMapping("/editar/{cedula}")
-    public String mostrarFormularioEditar(@PathVariable String cedula, Model modelo) {
-        Usuario usuario = usuarioServicio.buscarPorCedula(cedula);
-        if (usuario == null) {
-            return "redirect:/usuarios";
-        }
-        usuario.setClave("");
-        modelo.addAttribute("usuario", usuario);
-        return "usuarios/formulario";
-    }
-
-    // U — Actualizar usuario
-    @PostMapping("/actualizar")
-    public String actualizar(@ModelAttribute Usuario usuario) {
-        usuarioServicio.actualizar(usuario);
-        return "redirect:/usuarios";
-    }
-
-    // D — Eliminar usuario
-    @GetMapping("/eliminar/{cedula}")
-    public String eliminar(@PathVariable String cedula) {
-        usuarioServicio.eliminar(cedula);
-        return "redirect:/usuarios";
     }
 
     // Mostrar formulario de olvidé mi contraseña
