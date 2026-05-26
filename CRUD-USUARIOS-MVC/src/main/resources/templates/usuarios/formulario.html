@@ -29,6 +29,7 @@
     <div>
         <a th:href="@{/}"> Inicio</a>
         <a th:href="@{/usuarios}"> Usuarios</a>
+        <a th:href="@{/usuarios/agregar}"> Nuevo Usuario</a>
         <a th:href="@{/mascotas}"> Mascotas</a>
     </div>
     <div>
@@ -39,7 +40,7 @@
 </nav>
 <div class="container">
     <div class="card">
-        <h1 th:text="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? ' Editar Usuario' : ' Nuevo Usuario'">
+        <h1 th:text="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? 'Editar Usuario' : 'Nuevo Usuario'">
             Formulario
         </h1>
 
