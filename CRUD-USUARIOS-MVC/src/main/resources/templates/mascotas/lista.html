@@ -9,7 +9,6 @@
         nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
         nav a:hover { text-decoration: underline; }
         .container { max-width: 1100px; margin: 32px auto; padding: 0 20px; }
-        h1 { color: #333; margin-bottom: 20px; }
         .btn { display: inline-block; padding: 8px 16px; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; font-size: 13px; }
         .btn-success { background: #28a745; }
         .btn-warning { background: #e68a00; }
@@ -23,9 +22,14 @@
         .badge-no { background: #fdeaea; color: #c00; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        footer { margin-top: 24px; padding: 16px 0; border-top: 1px solid #ccc; font-size: 13px; color: #555; }
     </style>
 </head>
 <body>
+
+<!-- Guía 14: fragmento cabecero -->
+<header th:replace="plantillas/partes :: cabecero"></header>
+
 <nav>
     <div>
         <a th:href="@{/}"> Inicio</a>
@@ -39,29 +43,32 @@
         </form>
     </div>
 </nav>
+
 <div class="container">
     <div class="top-bar">
         <h1> Lista de Mascotas</h1>
-        <a th:href="@{/mascotas/agregar}" class="btn btn-success"> Nueva Mascota</a>
+        <a th:href="@{/mascotas/agregar}" class="btn btn-success" th:text="#{mascota.crear}">Nueva Mascota</a>
     </div>
 
-    <div th:if="${#lists.isEmpty(mascotas)}">
-        <p>No hay mascotas registradas todavía.</p>
+    <!-- Condición compatible con null y lista vacía -->
+    <div th:if="${mascotas == null or mascotas.size() == 0}">
+        <p th:text="#{mascota.lista-vacia}">No hay mascotas registradas.</p>
     </div>
 
-    <table th:if="${!#lists.isEmpty(mascotas)}">
+    <table th:if="${mascotas != null and mascotas.size() > 0}">
         <thead>
         <tr>
-            <th>Nombre</th>
-            <th>Especie</th>
-            <th>Raza</th>
-            <th>Género</th>
-            <th>Peso</th>
-            <th>Tamaño</th>
-            <th>Hábitat</th>
-            <th>Vacunas</th>
-            <th>Propietario</th>
-            <th>Acciones</th>
+            <th th:text="#{mascota.nombre}">Nombre</th>
+            <th th:text="#{mascota.especie}">Especie</th>
+            <th th:text="#{mascota.raza}">Raza</th>
+            <th th:text="#{mascota.genero}">Género</th>
+            <th th:text="#{mascota.peso}">Peso</th>
+            <th th:text="#{mascota.tamano}">Tamaño</th>
+            <th th:text="#{mascota.domesticoOSalvaje}">Hábitat</th>
+            <th th:text="#{mascota.tieneVacunas}">Vacunas</th>
+            <th th:text="#{mascota.propietario}">Propietario</th>
+            <th th:text="#{accion.editar}">Editar</th>
+            <th th:text="#{accion.eliminar}">Eliminar</th>
         </tr>
         </thead>
         <tbody>
@@ -78,16 +85,17 @@
                 <span th:unless="${mascota.tieneVacunas}" class="badge-no"> No</span>
             </td>
             <td th:text="${mascota.propietario}"></td>
-            <td>
-                <a th:href="@{/mascotas/ver/{id}(id=${mascota.id})}" class="btn">Ver</a>
-                <a th:href="@{/mascotas/editar/{id}(id=${mascota.id})}" class="btn btn-warning">Editar</a>
-                <a th:href="@{/mascotas/eliminar/{id}(id=${mascota.id})}"
-                   class="btn btn-danger"
-                   onclick="return confirm('¿Eliminar esta mascota?')">Eliminar</a>
-            </td>
+            <td><a th:href="@{/mascotas/editar/{id}(id=${mascota.id})}" th:text="#{accion.editar}">Editar</a></td>
+            <td><a th:href="@{/mascotas/eliminar/{id}(id=${mascota.id})}"
+                   th:text="#{accion.eliminar}"
+                   onclick="return confirm('¿Eliminar esta mascota?')">Eliminar</a></td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<!-- Guía 14: fragmento pie -->
+<footer th:replace="plantillas/partes :: pie"></footer>
+
 </body>
 </html>
