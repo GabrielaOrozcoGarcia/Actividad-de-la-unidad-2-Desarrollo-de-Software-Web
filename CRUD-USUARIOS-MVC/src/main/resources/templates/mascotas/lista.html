@@ -27,19 +27,20 @@
 </head>
 <body>
 
-<!-- Guía 14: fragmento cabecero -->
+<!-- Guia 14: fragmento cabecero -->
 <header th:replace="plantillas/partes :: cabecero"></header>
 
 <nav>
     <div>
         <a th:href="@{/}"> Inicio</a>
         <a th:href="@{/usuarios}"> Usuarios</a>
+        <a th:href="@{/usuarios/agregar}"> Nuevo Usuario</a>
         <a th:href="@{/mascotas}"> Mascotas</a>
         <a th:href="@{/mascotas/agregar}"> Nueva Mascota</a>
     </div>
     <div>
         <form th:action="@{/logout}" method="post" style="display:inline">
-            <button type="submit" class="logout-btn">Cerrar sesión</button>
+            <button type="submit" class="logout-btn">Cerrar sesion</button>
         </form>
     </div>
 </nav>
@@ -50,7 +51,7 @@
         <a th:href="@{/mascotas/agregar}" class="btn btn-success" th:text="#{mascota.crear}">Nueva Mascota</a>
     </div>
 
-    <!-- Condición compatible con null y lista vacía -->
+    <!-- Condicion compatible con null y lista vacia -->
     <div th:if="${mascotas == null or mascotas.size() == 0}">
         <p th:text="#{mascota.lista-vacia}">No hay mascotas registradas.</p>
     </div>
@@ -61,10 +62,10 @@
             <th th:text="#{mascota.nombre}">Nombre</th>
             <th th:text="#{mascota.especie}">Especie</th>
             <th th:text="#{mascota.raza}">Raza</th>
-            <th th:text="#{mascota.genero}">Género</th>
+            <th th:text="#{mascota.genero}">Genero</th>
             <th th:text="#{mascota.peso}">Peso</th>
             <th th:text="#{mascota.tamano}">Tamaño</th>
-            <th th:text="#{mascota.domesticoOSalvaje}">Hábitat</th>
+            <th th:text="#{mascota.domesticoOSalvaje}">Habitat</th>
             <th th:text="#{mascota.tieneVacunas}">Vacunas</th>
             <th th:text="#{mascota.propietario}">Propietario</th>
             <th th:text="#{accion.editar}">Editar</th>
@@ -81,7 +82,7 @@
             <td th:text="${mascota.tamano}"></td>
             <td th:text="${mascota.domesticoOSalvaje}"></td>
             <td>
-                <span th:if="${mascota.tieneVacunas}" class="badge-si"> Sí</span>
+                <span th:if="${mascota.tieneVacunas}" class="badge-si"> Si</span>
                 <span th:unless="${mascota.tieneVacunas}" class="badge-no"> No</span>
             </td>
             <td th:text="${mascota.propietario}"></td>
@@ -94,7 +95,7 @@
     </table>
 </div>
 
-<!-- Guía 14: fragmento pie -->
+<!-- Guia 14: fragmento pie -->
 <footer th:replace="plantillas/partes :: pie"></footer>
 
 </body>

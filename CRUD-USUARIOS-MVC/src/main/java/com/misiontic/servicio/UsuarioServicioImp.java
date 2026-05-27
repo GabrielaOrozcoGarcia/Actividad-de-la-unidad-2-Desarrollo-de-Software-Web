@@ -8,7 +8,6 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.mail.internet.MimeMessage;
@@ -20,9 +19,6 @@ public class UsuarioServicioImp implements IUsuarioServicio {
     private UsuarioRepositorio usuarioRepositorio;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JavaMailSender mailSender;
 
     // L — Listar todos los usuarios
@@ -32,11 +28,10 @@ public class UsuarioServicioImp implements IUsuarioServicio {
         return (List<Usuario>) usuarioRepositorio.findAll();
     }
 
-    // C — Guardar nuevo usuario (hashea la clave)
+    // C — Guardar nuevo usuario
     @Transactional
     @Override
     public void guardar(Usuario usuario) {
-        usuario.setClave(passwordEncoder.encode(usuario.getClave()));
         usuarioRepositorio.save(usuario);
     }
 
@@ -48,8 +43,6 @@ public class UsuarioServicioImp implements IUsuarioServicio {
         if (existente != null) {
             if (usuario.getClave() == null || usuario.getClave().isEmpty()) {
                 usuario.setClave(existente.getClave());
-            } else {
-                usuario.setClave(passwordEncoder.encode(usuario.getClave()));
             }
         }
         usuarioRepositorio.save(usuario);
@@ -78,7 +71,7 @@ public class UsuarioServicioImp implements IUsuarioServicio {
         return resultado.orElse(null);
     }
 
-    // Recuperar contraseña: genera clave temporal, la guarda y envía el correo
+    // Recuperar contraseña: genera clave temporal en texto plano y envia correo
     @Transactional
     @Override
     public void recuperarContrasena(String email) {
@@ -87,12 +80,11 @@ public class UsuarioServicioImp implements IUsuarioServicio {
             return;
         }
         String claveTemp = generarClaveTemporal();
-        usuario.setClave(passwordEncoder.encode(claveTemp));
+        usuario.setClave(claveTemp);
         usuarioRepositorio.save(usuario);
         enviarCorreoRecuperacion(usuario.getEmail(), usuario.getNombre(), claveTemp);
     }
 
-    // Genera una clave temporal alfanumérica de 8 caracteres
     private String generarClaveTemporal() {
         String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder clave = new StringBuilder();
@@ -103,31 +95,21 @@ public class UsuarioServicioImp implements IUsuarioServicio {
         return clave.toString();
     }
 
-    // Envía el correo HTML con la clave temporal
     private void enviarCorreoRecuperacion(String email, String nombre, String claveTemp) {
         try {
             MimeMessage mensaje = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mensaje, true, "UTF-8");
-
             helper.setFrom("no-reply@mascotasapp.local");
             helper.setTo(email);
-            helper.setSubject("Recuperación de contraseña - Mascotas App");
-
-            String cuerpo = "<html><body style='font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:0'>"
-                    + "<div style='max-width:560px;margin:40px auto;background:#fff;border:1px solid #ddd;"
-                    + "border-radius:6px;padding:32px'>"
-                    + "<h2 style='color:#333;margin-top:0'>Hola, " + nombre + "</h2>"
-                    + "<p style='color:#555'>Tu nueva contraseña temporal es:</p>"
-                    + "<div style='font-size:1.4em;font-weight:bold;background:#f0f7ff;"
-                    + "border:1px solid #99c8ff;border-radius:4px;padding:12px 20px;"
-                    + "display:inline-block;letter-spacing:2px;margin:12px 0'>"
-                    + claveTemp + "</div>"
-                    + "<p style='color:#555'>Por seguridad, cámbiala al iniciar sesión.</p>"
-                    + "</div></body></html>";
-
+            helper.setSubject("Recuperacion de contraseña - CRUDL USUARIOS- MASCOTAS APP");
+            String cuerpo = "<html><body style='font-family:Arial,sans-serif'>"
+                    + "<h2>Hola, " + nombre + "</h2>"
+                    + "<p>Tu nueva contraseña temporal es:</p>"
+                    + "<h3>" + claveTemp + "</h3>"
+                    + "<p>Por seguridad, cambiala al iniciar sesion.</p>"
+                    + "</body></html>";
             helper.setText(cuerpo, true);
             mailSender.send(mensaje);
-
         } catch (Exception e) {
             System.err.println("Error enviando correo: " + e.getMessage());
         }

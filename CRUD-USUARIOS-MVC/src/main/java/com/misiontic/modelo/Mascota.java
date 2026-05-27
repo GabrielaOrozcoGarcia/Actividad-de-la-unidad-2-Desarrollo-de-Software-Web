@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
@@ -54,9 +55,9 @@ public class Mascota implements Serializable {
     @Column(nullable = false, length = 50)
     private String especie;
 
-    @NotEmpty
+    @NotNull
     @Column(name = "fecha_nacimiento", nullable = false, length = 10)
-    private String fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     @NotEmpty
     @Column(nullable = false, length = 100)

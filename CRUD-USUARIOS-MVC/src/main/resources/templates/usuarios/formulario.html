@@ -9,12 +9,20 @@
         nav { background: #333; padding: 12px 24px; display: flex; justify-content: space-between; }
         nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
         .container { max-width: 600px; margin: 32px auto; padding: 0 20px; }
-        label { display: block; margin-top: 12px; font-weight: 500; }
-        input { width: 100%; padding: 8px; box-sizing: border-box; margin-top: 4px; }
-        input[readonly] { background: #f0f0f0; color: #888; }
-        .error { color: #cc0000; font-size: 12px; }
-        footer { margin-top: 24px; padding: 16px 0; border-top: 1px solid #ccc; font-size: 13px; color: #555; }
+        .card { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h1 { color: #333; margin-bottom: 8px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
+        input { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        input:focus { outline: none; border-color: #333; }
+        input[readonly] { background: #f5f5f5; color: #888; }
+        .error { color: #cc0000; font-size: 12px; display: block; margin-top: 4px; }
+        .hint { font-size: 12px; color: #888; margin-top: 4px; }
+        .btn { display: inline-block; padding: 10px 20px; background: #333; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; font-size: 14px; }
+        .btn-reset { background: #888; margin-right: 8px; }
+        .btn:hover { opacity: 0.85; }
         .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        footer { margin-top: 24px; padding: 16px 0; border-top: 1px solid #ccc; font-size: 13px; color: #555; }
     </style>
 </head>
 <body>
@@ -23,54 +31,69 @@
 
 <nav>
     <div>
-        <a th:href="@{/}">Inicio</a>
-        <a th:href="@{/usuarios}">Usuarios</a>
-        <a th:href="@{/mascotas}">Mascotas</a>
+        <a th:href="@{/}"> Inicio</a>
+        <a th:href="@{/usuarios}"> Usuarios</a>
+        <a th:href="@{/usuarios/agregar}">Nuevo Usuario</a>
     </div>
     <div>
         <form th:action="@{/logout}" method="post" style="display:inline">
-            <button type="submit" class="logout-btn">Cerrar sesión</button>
+            <button type="submit" class="logout-btn">Cerrar sesion</button>
         </form>
     </div>
 </nav>
 
 <div class="container">
-    <h1>[[#{usuario.formulario}]]</h1>
-    <a th:href="@{/}" th:text="#{accion.regresar}">REGRESAR</a>
-    <br/>
+    <div class="card">
+        <h1>[[#{usuario.formulario}]]</h1>
 
-    <form th:action="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? '/usuarios/actualizar' : '/usuarios/guardar'"
-          th:object="${usuario}" method="post">
-        <br/>
+        <!-- Regresar siempre va a la lista de usuarios -->
+        <a th:href="@{/usuarios}" th:text="#{accion.regresar}">REGRESAR</a>
+        <br/><br/>
 
-        <!-- CEDULA -->
-        <label for="cedula" th:text="#{usuario.cedula}">CEDULA:</label>
-        <input type="text" name="cedula" id="cedula" th:field="*{cedula}" th:readonly="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}" />
-        <span th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}" class="error"></span>
-        <br/>
+        <form th:action="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? '/usuarios/actualizar' : '/usuarios/guardar'"
+              th:object="${usuario}" method="post">
 
-        <!-- CLAVE -->
-        <label for="clave" th:text="#{usuario.clave}">CLAVE:</label>
-        <input type="password" name="clave" id="clave" th:field="*{clave}" />
-        <span th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}" class="error"></span>
-        <br/>
+            <!-- CEDULA -->
+            <div class="form-group">
+                <label for="cedula" th:text="#{usuario.cedula}">CEDULA:</label>
+                <input type="text" id="cedula" name="cedula" th:field="*{cedula}" th:readonly="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}" />
+                <span th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}" class="error"></span>
+                <div class="hint" th:if="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)}">La cedula no se puede modificar.</div>
+            </div>
 
-        <!-- NOMBRE -->
-        <label for="nombre" th:text="#{usuario.nombre}">NOMBRE:</label>
-        <input type="text" name="nombre" id="nombre" th:field="*{nombre}" />
-        <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="error"></span>
-        <br/>
+            <!-- CLAVE -->
+            <div class="form-group">
+                <label for="clave" th:text="#{usuario.clave}">CLAVE:</label>
+                <input type="password" id="clave" name="clave" th:field="*{clave}" />
+                <span th:if="${#fields.hasErrors('clave')}" th:errors="*{clave}" class="error"></span>
+            </div>
 
-        <!-- EMAIL -->
-        <label for="email" th:text="#{usuario.email}">EMAIL:</label>
-        <input type="email" name="email" id="email" th:field="*{email}" />
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
-        <br/>
+            <!-- NOMBRE -->
+            <div class="form-group">
+                <label for="nombre" th:text="#{usuario.nombre}">NOMBRE:</label>
+                <input type="text" id="nombre" name="nombre" th:field="*{nombre}" />
+                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="error"></span>
+            </div>
 
-        <input type="reset" th:value="#{accion.reiniciar}" />&nbsp;&nbsp;&nbsp;
-        <input type="submit" name="guardar" th:value="#{accion.agregar}" />
-        <br/>
-    </form>
+            <!-- EMAIL -->
+            <div class="form-group">
+                <label for="email" th:text="#{usuario.email}">EMAIL:</label>
+                <input type="email" id="email" name="email" th:field="*{email}" />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+            </div>
+
+            <div style="margin-top: 24px;">
+                <!-- Boton LIMPIAR solo aparece al CREAR, no al editar -->
+                <input th:if="${usuario.cedula == null or #strings.isEmpty(usuario.cedula)}"
+                       type="reset" th:value="#{accion.reiniciar}" class="btn btn-reset" />
+
+                <!-- Boton GUARDAR cambia texto segun modo -->
+                <input type="submit" name="guardar"
+                       th:value="${usuario.cedula != null and !#strings.isEmpty(usuario.cedula)} ? #{accion.editar} : #{accion.agregar}"
+                       class="btn" />
+            </div>
+        </form>
+    </div>
 </div>
 
 <footer th:replace="plantillas/partes :: pie"></footer>

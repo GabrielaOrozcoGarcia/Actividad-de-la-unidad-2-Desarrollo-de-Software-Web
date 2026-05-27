@@ -1,169 +1,512 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <title>DATOS DE LA MASCOTA</title>
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; }
-        nav { background: #0066cc; padding: 12px 24px; display: flex; justify-content: space-between; }
-        nav a { color: white; text-decoration: none; margin-right: 16px; font-size: 14px; }
-        .container { max-width: 750px; margin: 32px auto; padding: 0 20px; }
-        .card { background: white; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        h1 { color: #333; margin-bottom: 24px; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; font-weight: 500; }
-        input, select { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
-        input:focus, select:focus { outline: none; border-color: #0066cc; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .error { color: #cc0000; font-size: 12px; display: block; margin-top: 4px; }
-        .btn { display: inline-block; padding: 10px 20px; background: #0066cc; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; font-size: 14px; }
-        .btn-secondary { background: #6c757d; margin-left: 8px; }
-        .btn:hover { opacity: 0.85; }
-        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-        .checkbox-group input { width: auto; }
-        .logout-btn { background: none; border: 1px solid white; color: white; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 14px; }
-        footer { margin-top: 24px; padding: 16px 0; border-top: 1px solid #ccc; font-size: 13px; color: #555; }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        nav {
+            background: #0066cc;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-right: 16px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 32px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .error {
+            color: #cc0000;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        footer {
+            margin-top: 24px;
+            padding: 16px 0;
+            border-top: 1px solid #ccc;
+            font-size: 13px;
+            color: #555;
+        }
+
     </style>
+
 </head>
+
 <body>
 
-<!-- Guía 14: fragmento cabecero -->
+<!-- CABECERO -->
 <header th:replace="plantillas/partes :: cabecero"></header>
 
+<!-- MENU -->
 <nav>
+
     <div>
-        <a th:href="@{/}"> Inicio</a>
-        <a th:href="@{/mascotas}"> Mascotas</a>
-        <a th:href="@{/mascotas/agregar}"> Nueva Mascota</a>
+        <a th:href="@{/}">Inicio</a>
+        <a th:href="@{/mascotas}">Mascotas</a>
+        <a th:href="@{/mascotas/agregar}">Nueva Mascota</a>
     </div>
+
     <div>
-        <!-- Guía 16: logout con CSRF -->
         <form th:action="@{/logout}" method="post" style="display:inline">
-            <button type="submit" class="logout-btn">Cerrar sesión</button>
+
+            <button type="submit" class="logout-btn">
+                Cerrar sesion
+            </button>
+
         </form>
     </div>
+
 </nav>
 
+<!-- CONTENIDO -->
 <div class="container">
+
     <div class="card">
-        <!-- Guía 15: título desde messages.properties con [[#{}]] -->
-        <h1>[[#{mascota.formulario}]]</h1>
 
-        <!-- Guía 15: enlace regresar desde messages.properties -->
-        <a th:href="@{/mascotas}" th:text="#{accion.regresar}">REGRESAR</a>
-        <br/><br/>
+        <!-- TITULO -->
+        <h1 th:text="#{mascota.formulario}">
+            Formulario Mascota
+        </h1>
 
-        <form th:action="${mascota.id != null} ? '/mascotas/actualizar' : '/mascotas/guardar'"
-              th:object="${mascota}" method="post">
+        <!-- BOTON REGRESAR -->
+        <a th:href="@{/mascotas}"
+           th:text="#{accion.regresar}">
+            Regresar
+        </a>
 
+        <br><br>
+
+        <!-- FORMULARIO -->
+        <form th:action="${mascota.id == null} ? '/mascotas/guardar' : '/mascotas/actualizar'"
+              th:object="${mascota}"
+              method="post">
+
+            <!-- ID -->
             <input type="hidden" th:field="*{id}" />
 
+            <!-- FILA 1 -->
             <div class="form-row">
+
                 <div class="form-group">
-                    <!-- Guía 15: label desde messages.properties -->
-                    <label th:text="#{mascota.nombre}">Nombre</label>
-                    <input type="text" id="nombre" th:field="*{nombre}" placeholder="Nombre de la mascota" />
-                    <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="error"></span>
+
+                    <label th:text="#{mascota.nombre}">
+                        Nombre
+                    </label>
+
+                    <input type="text"
+                           id="nombre"
+                           th:field="*{nombre}"
+                           placeholder="Nombre de la mascota" />
+
+                    <span th:if="${#fields.hasErrors('nombre')}"
+                          th:errors="*{nombre}"
+                          class="error">
+                    </span>
+
                 </div>
+
                 <div class="form-group">
-                    <label th:text="#{mascota.especie}">Especie</label>
-                    <input type="text" id="especie" th:field="*{especie}" placeholder="Ej: Perro, Gato, Ave" />
-                    <span th:if="${#fields.hasErrors('especie')}" th:errors="*{especie}" class="error"></span>
+
+                    <label th:text="#{mascota.especie}">
+                        Especie
+                    </label>
+
+                    <input type="text"
+                           id="especie"
+                           th:field="*{especie}"
+                           placeholder="Ej: Perro, Gato, Ave" />
+
+                    <span th:if="${#fields.hasErrors('especie')}"
+                          th:errors="*{especie}"
+                          class="error">
+                    </span>
+
                 </div>
+
             </div>
 
+            <!-- FILA 2 -->
             <div class="form-row">
+
                 <div class="form-group">
-                    <label th:text="#{mascota.raza}">Raza</label>
-                    <input type="text" id="raza" th:field="*{raza}" placeholder="Raza de la mascota" />
-                    <span th:if="${#fields.hasErrors('raza')}" th:errors="*{raza}" class="error"></span>
+
+                    <label th:text="#{mascota.raza}">
+                        Raza
+                    </label>
+
+                    <input type="text"
+                           id="raza"
+                           th:field="*{raza}"
+                           placeholder="Raza de la mascota" />
+
+                    <span th:if="${#fields.hasErrors('raza')}"
+                          th:errors="*{raza}"
+                          class="error">
+                    </span>
+
                 </div>
+
                 <div class="form-group">
-                    <label th:text="#{mascota.genero}">Género</label>
+
+                    <label th:text="#{mascota.genero}">
+                        Genero
+                    </label>
+
                     <select id="genero" th:field="*{genero}">
-                        <option value="">-- Seleccionar --</option>
-                        <option value="Macho">Macho</option>
-                        <option value="Hembra">Hembra</option>
+
+                        <option value="">
+                            -- Seleccionar --
+                        </option>
+
+                        <option value="Macho">
+                            Macho
+                        </option>
+
+                        <option value="Hembra">
+                            Hembra
+                        </option>
+
                     </select>
-                    <span th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" class="error"></span>
+
+                    <span th:if="${#fields.hasErrors('genero')}"
+                          th:errors="*{genero}"
+                          class="error">
+                    </span>
+
                 </div>
+
             </div>
 
+            <!-- FILA 3 -->
             <div class="form-row">
+
                 <div class="form-group">
-                    <label th:text="#{mascota.peso}">Peso (kg)</label>
-                    <input type="number" id="peso" th:field="*{peso}" step="0.01" min="0.01" placeholder="Ej: 5.5" />
-                    <span th:if="${#fields.hasErrors('peso')}" th:errors="*{peso}" class="error"></span>
+
+                    <label th:text="#{mascota.peso}">
+                        Peso
+                    </label>
+
+                    <input type="number"
+                           id="peso"
+                           th:field="*{peso}"
+                           step="0.01"
+                           min="0.01"
+                           placeholder="Ej: 5.5" />
+
+                    <span th:if="${#fields.hasErrors('peso')}"
+                          th:errors="*{peso}"
+                          class="error">
+                    </span>
+
                 </div>
+
                 <div class="form-group">
-                    <label th:text="#{mascota.tamano}">Tamaño</label>
+
+                    <label th:text="#{mascota.tamano}">
+                        Tamaño
+                    </label>
+
                     <select id="tamano" th:field="*{tamano}">
-                        <option value="">-- Seleccionar --</option>
-                        <option value="Pequeño">Pequeño</option>
-                        <option value="Mediano">Mediano</option>
-                        <option value="Grande">Grande</option>
+
+                        <option value="">
+                            -- Seleccionar --
+                        </option>
+
+                        <option value="Pequeño">
+                            Pequeño
+                        </option>
+
+                        <option value="Mediano">
+                            Mediano
+                        </option>
+
+                        <option value="Grande">
+                            Grande
+                        </option>
+
                     </select>
-                    <span th:if="${#fields.hasErrors('tamano')}" th:errors="*{tamano}" class="error"></span>
+
+                    <span th:if="${#fields.hasErrors('tamano')}"
+                          th:errors="*{tamano}"
+                          class="error">
+                    </span>
+
                 </div>
+
             </div>
 
+            <!-- FILA 4 -->
             <div class="form-row">
+
                 <div class="form-group">
-                    <label th:text="#{mascota.color}">Color</label>
-                    <input type="text" id="color" th:field="*{color}" placeholder="Color de la mascota" />
-                    <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}" class="error"></span>
+
+                    <label th:text="#{mascota.color}">
+                        Color
+                    </label>
+
+                    <input type="text"
+                           id="color"
+                           th:field="*{color}"
+                           placeholder="Color de la mascota" />
+
+                    <span th:if="${#fields.hasErrors('color')}"
+                          th:errors="*{color}"
+                          class="error">
+                    </span>
+
                 </div>
+
                 <div class="form-group">
-                    <label th:text="#{mascota.fechaNacimiento}">Fecha de Nacimiento</label>
-                    <input type="date" id="fechaNacimiento" th:field="*{fechaNacimiento}" />
-                    <span th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}" class="error"></span>
+
+                    <label th:text="#{mascota.fechaNacimiento}">
+                        Fecha de Nacimiento
+                    </label>
+
+                    <input type="date"
+                           id="fechaNacimiento"
+                           th:field="*{fechaNacimiento}" />
+
+                    <span th:if="${#fields.hasErrors('fechaNacimiento')}"
+                          th:errors="*{fechaNacimiento}"
+                          class="error">
+                    </span>
+
                 </div>
+
             </div>
 
+            <!-- FILA 5 -->
             <div class="form-row">
+
                 <div class="form-group">
-                    <label th:text="#{mascota.propietario}">Propietario</label>
-                    <input type="text" id="propietario" th:field="*{propietario}" placeholder="Nombre del propietario" />
-                    <span th:if="${#fields.hasErrors('propietario')}" th:errors="*{propietario}" class="error"></span>
+
+                    <label th:text="#{mascota.propietario}">
+                        Propietario
+                    </label>
+
+                    <input type="text"
+                           id="propietario"
+                           th:field="*{propietario}"
+                           placeholder="Nombre del propietario" />
+
+                    <span th:if="${#fields.hasErrors('propietario')}"
+                          th:errors="*{propietario}"
+                          class="error">
+                    </span>
+
                 </div>
+
                 <div class="form-group">
-                    <label th:text="#{mascota.domesticoOSalvaje}">Hábitat</label>
-                    <select id="domesticoOSalvaje" th:field="*{domesticoOSalvaje}">
-                        <option value="">-- Seleccionar --</option>
-                        <option value="Doméstico">Doméstico</option>
-                        <option value="Salvaje">Salvaje</option>
+
+                    <label th:text="#{mascota.domesticoOSalvaje}">
+                        Habitat
+                    </label>
+
+                    <select id="domesticoOSalvaje"
+                            th:field="*{domesticoOSalvaje}">
+
+                        <option value="">
+                            -- Seleccionar --
+                        </option>
+
+                        <option value="Domestico">
+                            Domestico
+                        </option>
+
+                        <option value="Salvaje">
+                            Salvaje
+                        </option>
+
                     </select>
-                    <span th:if="${#fields.hasErrors('domesticoOSalvaje')}" th:errors="*{domesticoOSalvaje}" class="error"></span>
+
+                    <span th:if="${#fields.hasErrors('domesticoOSalvaje')}"
+                          th:errors="*{domesticoOSalvaje}"
+                          class="error">
+                    </span>
+
                 </div>
+
             </div>
 
+            <!-- VETERINARIO -->
             <div class="form-group">
-                <label th:text="#{mascota.veterinario}">Veterinario</label>
-                <input type="text" id="veterinario" th:field="*{veterinario}" placeholder="Nombre del veterinario" />
-                <span th:if="${#fields.hasErrors('veterinario')}" th:errors="*{veterinario}" class="error"></span>
+
+                <label th:text="#{mascota.veterinario}">
+                    Veterinario
+                </label>
+
+                <input type="text"
+                       id="veterinario"
+                       th:field="*{veterinario}"
+                       placeholder="Nombre del veterinario" />
+
+                <span th:if="${#fields.hasErrors('veterinario')}"
+                      th:errors="*{veterinario}"
+                      class="error">
+                </span>
+
             </div>
 
+            <!-- VACUNAS -->
             <div class="form-group">
-                <label th:text="#{mascota.tieneVacunas}">¿Tiene vacunas?</label>
+
+                <label th:text="#{mascota.tieneVacunas}">
+                    ¿Tiene vacunas?
+                </label>
+
                 <div class="checkbox-group">
-                    <input type="checkbox" id="tieneVacunas" th:field="*{tieneVacunas}" />
-                    <label for="tieneVacunas" style="margin:0">Sí, tiene vacunas</label>
+
+                    <input type="checkbox"
+                           id="tieneVacunas"
+                           th:field="*{tieneVacunas}" />
+
+                    <label for="tieneVacunas" style="margin:0">
+                        Si, tiene vacunas
+                    </label>
+
                 </div>
+
             </div>
 
+            <!-- BOTONES -->
             <div style="margin-top: 24px;">
-                <!-- Guía 15: botones desde messages.properties -->
-                <input type="reset" th:value="#{accion.reiniciar}" />&nbsp;&nbsp;&nbsp;
-                <input type="submit" name="guardar" th:value="#{accion.agregar}" class="btn" />
-                <a th:href="@{/mascotas}" th:text="#{accion.cancelar}" class="btn btn-secondary">Cancelar</a>
+
+                <!-- NUEVA MASCOTA -->
+                <div th:if="${mascota.id == null}">
+
+                    <input type="reset"
+                           th:value="#{accion.reiniciar}" />
+
+                    &nbsp;&nbsp;&nbsp;
+
+                    <input type="submit"
+                           th:value="#{accion.agregar}"
+                           class="btn" />
+
+                </div>
+
+                <!-- EDITAR MASCOTA -->
+                <div th:if="${mascota.id != null}">
+
+                    <input type="submit"
+                           th:value="#{accion.editar}"
+                           class="btn" />
+
+                </div>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
 
-<!-- Guía 14: fragmento pie -->
+<!-- PIE -->
 <footer th:replace="plantillas/partes :: pie"></footer>
 
 </body>
+
 </html>
