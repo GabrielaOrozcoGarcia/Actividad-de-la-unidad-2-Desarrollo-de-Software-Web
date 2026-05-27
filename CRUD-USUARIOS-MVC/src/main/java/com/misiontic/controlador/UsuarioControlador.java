@@ -25,13 +25,13 @@ public class UsuarioControlador {
         return "usuarios/lista";
     }
 
-    // C — Mostrar formulario nuevo  (Guía 10: ruta /agregar)
+    // C — Mostrar formulario nuevo  (Guia 10: ruta /agregar)
     @GetMapping("/agregar")
     public String agregar(Usuario usuario) {
         return "usuarios/formulario";
     }
 
-    // C — Guardar nuevo usuario con validación  (Guía 13)
+    // C — Guardar nuevo usuario con validacion  (Guia 13)
     @PostMapping("/guardar")
     public String guardar(@Valid Usuario usuario, Errors errores) {
         if (errores.hasErrors()) {
@@ -41,7 +41,7 @@ public class UsuarioControlador {
         return "redirect:/usuarios";
     }
 
-    // U — Mostrar formulario editar  (Guía 11: ruta /editar/{cedula})
+    // U — Mostrar formulario editar  (Guia 11: ruta /editar/{cedula})
     @GetMapping("/editar/{cedula}")
     public String editar(@PathVariable String cedula, Model modelo) {
         Usuario usuario = usuarioServicio.buscarPorCedula(cedula);
@@ -53,7 +53,7 @@ public class UsuarioControlador {
         return "usuarios/formulario";
     }
 
-    // U — Actualizar usuario con validación  (Guía 13)
+    // U — Actualizar usuario con validacion  (Guia 13)
     @PostMapping("/actualizar")
     public String actualizar(@Valid Usuario usuario, Errors errores) {
         if (errores.hasErrors()) {
@@ -63,7 +63,7 @@ public class UsuarioControlador {
         return "redirect:/usuarios";
     }
 
-    // D — Eliminar usuario  (Guía 12: ruta /eliminar/{cedula})
+    // D — Eliminar usuario  (Guia 12: ruta /eliminar/{cedula})
     @GetMapping("/eliminar/{cedula}")
     public String eliminar(@PathVariable String cedula) {
         usuarioServicio.eliminar(cedula);
@@ -81,21 +81,21 @@ public class UsuarioControlador {
         return "usuarios/detalle";
     }
 
-    // Mostrar formulario de olvidé mi contraseña
+    // Mostrar formulario de olvide mi contraseña
     @GetMapping("/olvide-contrasena")
     public String mostrarOlvideContrasena() {
         return "usuarios/olvide-contrasena";
     }
 
-    // Procesar recuperación de contraseña
+    // Procesar recuperacion de contraseña
     @PostMapping("/recuperar-contrasena")
     public String recuperarContrasena(
             @RequestParam String email,
             Model modelo) {
         usuarioServicio.recuperarContrasena(email);
         modelo.addAttribute("mensaje",
-                "Si el correo está registrado en el sistema, " +
-                        "recibirás un mensaje con tu contraseña temporal en breve.");
+                "Si el correo esta registrado en el sistema, " +
+                        "recibiras un mensaje con tu contraseña temporal en breve.");
         return "usuarios/olvide-contrasena";
     }
 }

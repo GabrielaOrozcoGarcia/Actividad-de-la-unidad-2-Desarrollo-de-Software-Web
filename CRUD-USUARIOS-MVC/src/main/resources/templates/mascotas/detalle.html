@@ -29,7 +29,7 @@
     </div>
     <div>
         <form th:action="@{/logout}" method="post" style="display:inline">
-            <button type="submit" class="logout-btn">Cerrar sesión</button>
+            <button type="submit" class="logout-btn">Cerrar sesion</button>
         </form>
     </div>
 </nav>
@@ -41,17 +41,17 @@
             <tr><th>Nombre</th><td th:text="${mascota.nombre}"></td></tr>
             <tr><th>Especie</th><td th:text="${mascota.especie}"></td></tr>
             <tr><th>Raza</th><td th:text="${mascota.raza}"></td></tr>
-            <tr><th>Género</th><td th:text="${mascota.genero}"></td></tr>
+            <tr><th>Genero</th><td th:text="${mascota.genero}"></td></tr>
             <tr><th>Peso</th><td th:text="${mascota.peso} + ' kg'"></td></tr>
             <tr><th>Tamaño</th><td th:text="${mascota.tamano}"></td></tr>
             <tr><th>Color</th><td th:text="${mascota.color}"></td></tr>
             <tr><th>Fecha Nacimiento</th><td th:text="${mascota.fechaNacimiento}"></td></tr>
             <tr><th>Propietario</th><td th:text="${mascota.propietario}"></td></tr>
-            <tr><th>Hábitat</th><td th:text="${mascota.domesticoOSalvaje}"></td></tr>
+            <tr><th>Habitat</th><td th:text="${mascota.domesticoOSalvaje}"></td></tr>
             <tr>
                 <th>Tiene Vacunas</th>
                 <td>
-                    <span th:if="${mascota.tieneVacunas}" class="badge-si"> Sí</span>
+                    <span th:if="${mascota.tieneVacunas}" class="badge-si"> Si</span>
                     <span th:unless="${mascota.tieneVacunas}" class="badge-no"> No</span>
                 </td>
             </tr>
